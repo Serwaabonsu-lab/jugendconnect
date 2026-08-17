@@ -162,9 +162,9 @@
 
   .event-card { width: 100%; max-width: 380px; margin-left: auto; border-radius: 20px; overflow: hidden;
     border: 1px solid var(--border); box-shadow: 0 20px 44px -18px rgba(9,21,44,.28); background: var(--bg); position: relative; }
-  .event-card .badge-float { position: absolute; top: -12px; right: -12px; background: var(--bg); border-radius: 50%; padding: 5px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.14); border: 1px solid var(--border); }
-  .event-card .badge-float img { width: 34px; height: 34px; border-radius: 50%; }
+  .event-card .badge-float { position: absolute; top: 14px; right: 14px; background: #fff; border-radius: 50%; padding: 6px;
+    box-shadow: 0 4px 14px rgba(0,0,0,.28); border: 2px solid #fff; z-index: 2; }
+  .event-card .badge-float img { width: 48px; height: 48px; border-radius: 50%; display: block; }
   .event-card .card-head { background: var(--navy-600); padding: 18px 22px; display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
   .event-card .card-head p:first-child { color: var(--navy-200); font-size: 12px; margin: 0 0 2px; font-weight: 600; }
   .event-card .card-head p:last-child { color: #fff; font-family: var(--font-heading); font-weight: 800; font-size: 17px; margin: 0; }
@@ -459,10 +459,10 @@
           <span class="card-badge" data-i18n="hero.cardBadge">Geplant</span>
         </div>
         <div>
-          <div class="task-row"><div class="task-check done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div><span class="task-label done">Snacks &amp; Getränke</span><span class="task-person">Lena</span></div>
-          <div class="task-row"><div class="task-check done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div><span class="task-label done">Andacht vorbereiten</span><span class="task-person">Jonas</span></div>
-          <div class="task-row"><div class="task-check"></div><span class="task-label">Technik &amp; Musik</span><span class="task-person">Sarah</span></div>
-          <div class="task-row"><div class="task-check"></div><span class="task-label">Spiele-Programm</span><span class="task-person">Ali</span></div>
+          <div class="task-row"><div class="task-check done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div><span class="task-label">Eröffnungsgebet leiten</span><span class="task-person">Lena</span></div>
+          <div class="task-row"><div class="task-check done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div><span class="task-label">PIWCDUS Jugendtreffen</span><span class="task-person">Jonas</span></div>
+          <div class="task-row"><div class="task-check"></div><span class="task-label">Chorprobe</span><span class="task-person">Sarah</span></div>
+          <div class="task-row"><div class="task-check"></div><span class="task-label">Einstehergebete</span><span class="task-person">Ali</span></div>
         </div>
         <div class="card-notif">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
@@ -666,8 +666,8 @@
         s1cta: "Event erstellen (Demo)", s1date: "Fr, 18. Juli 2025", s1loc: "Gemeindehaus, Hauptstraße 5, 12345 Musterstadt",
         s2sub: "Schritt 2", s2title: "Aufgaben zuteilen", s2desc: "Organisatoren weisen dem Team Aufgaben zu – auch an sich selbst.",
         s3sub: "Schritt 3", s3title: "Automatische Benachrichtigung", s3desc: "Nach der Zuteilung erhält die Person automatisch eine SMS und WhatsApp-Nachricht:",
-        s3smsLabel: "SMS von +49 1521 1424402", s3smsBody: "Hallo Sarah, du wurdest für 'Technik & Musik' beim Jugendkreis am Freitag 18:00 eingeteilt. Bitte antworte mit 'Ja' oder 'Nein' (mit Begründung). – JugendConnect",
-        s3waLabel: "WhatsApp von +49 1521 1424402", s3waBody: "Hallo Sarah! Du wurdest für 'Technik & Musik' beim Jugendkreis eingeteilt (Fr, 18. Juli, 18:00 Uhr). Bitte gib eine Rückmeldung: annehmen oder begründet ablehnen. – JugendConnect",
+        s3smsLabel: "SMS von +49 1521 1424402", s3smsBody: "Hallo Sarah, du wurdest für 'Chorprobe' beim Jugendkreis am Freitag 18:00 eingeteilt. Bitte antworte mit 'Ja' oder 'Nein' (mit Begründung). – JugendConnect",
+        s3waLabel: "WhatsApp von +49 1521 1424402", s3waBody: "Hallo Sarah! Du wurdest für 'Chorprobe' beim Jugendkreis eingeteilt (Fr, 18. Juli, 18:00 Uhr). Bitte gib eine Rückmeldung: annehmen oder begründet ablehnen. – JugendConnect",
         s3notif: "Benachrichtigungen werden automatisch nach Zuteilung versendet.",
         s4sub: "Schritt 4", s4title: "Rückmeldung geben", s4desc: "Die eingeteilte Person kann die Aufgabe annehmen oder begründet ablehnen:",
         s4accept: "Annehmen", s4acceptSub: "Aufgabe übernehmen", s4decline: "Ablehnen", s4declineSub: "Mit Begründung",
@@ -791,14 +791,14 @@
     }
     if (step === 1) {
       var tasks = [
-        { done: true, label: "Snacks & Getränke", person: "Lena" },
-        { done: true, label: "Andacht vorbereiten", person: "Jonas" },
-        { done: false, label: "Technik & Musik", person: "Sarah" },
-        { done: false, label: "Spiele-Programm", person: "Ali" }
+        { done: true, label: "Eröffnungsgebet leiten", person: "Lena" },
+        { done: true, label: "PIWCDUS Jugendtreffen", person: "Jonas" },
+        { done: false, label: "Chorprobe", person: "Sarah" },
+        { done: false, label: "Einstehergebete", person: "Ali" }
       ];
       var rows = tasks.map(function (task) {
         return '<div class="task-row"><div class="task-check' + (task.done ? ' done' : '') + '">' + (task.done ? checkSVG : '') + '</div>' +
-          '<span class="task-label' + (task.done ? ' done' : '') + '">' + task.label + '</span>' +
+          '<span class="task-label">' + task.label + '</span>' +
           '<span class="task-person">' + task.person + '</span></div>';
       }).join('');
       return '<div class="dp-head"><p>' + d.s2sub + '</p><p>' + d.s2title + '</p></div><div class="dp-body">' +
@@ -821,8 +821,8 @@
         '<div class="response-opt accept" style="color:#15803d;">' + checkCircleSVG + '<span class="lbl" style="color:var(--text);">' + d.s4accept + '</span><p class="sub">' + d.s4acceptSub + '</p></div>' +
         '<div class="response-opt decline" style="color:var(--red-500);">' + xCircleSVG + '<span class="lbl" style="color:var(--text);">' + d.s4decline + '</span><p class="sub">' + d.s4declineSub + '</p></div>' +
       '</div>' +
-      '<div class="status-row"><span class="name">Snacks &amp; Getränke</span><span class="status-pill accepted">' + checkCircleSVG.replace('<svg ', '<svg width="12" height="12" ') + d.s4accepted + '</span></div>' +
-      '<div class="status-row"><span class="name">Technik &amp; Musik</span><span class="status-pill pending">' + clockSVG.replace('<svg ', '<svg width="12" height="12" ') + d.s4pending + '</span></div>' +
+      '<div class="status-row"><span class="name">Eröffnungsgebet leiten</span><span class="status-pill accepted">' + checkCircleSVG.replace('<svg ', '<svg width="12" height="12" ') + d.s4accepted + '</span></div>' +
+      '<div class="status-row"><span class="name">Chorprobe</span><span class="status-pill pending">' + clockSVG.replace('<svg ', '<svg width="12" height="12" ') + d.s4pending + '</span></div>' +
     '</div>';
   }
 
