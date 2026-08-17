@@ -268,6 +268,19 @@
   .dp-body p.lead { font-size: 13.5px; color: var(--text-muted); margin: 0 0 16px; }
   .dp-tasklist { border: 1px solid var(--border); border-radius: 13px; overflow: hidden; }
   .dp-tasklist .task-row { padding: 13px 16px; }
+  .task-add-btn { width: 100%; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 12px; border: 1.5px dashed var(--border); border-radius: 12px; background: transparent; color: var(--navy-600);
+    font-size: 13.5px; font-weight: 700; transition: background .15s, border-color .15s; }
+  .task-add-btn:hover { background: var(--surface-2); border-color: var(--navy-400); }
+  .task-add-btn svg { width: 16px; height: 16px; }
+  :root[data-theme="dark"] .task-add-btn { color: var(--yellow-400); }
+  @media (prefers-color-scheme: dark) { .task-add-btn { color: var(--yellow-400); } }
+  .task-add-form { margin-top: 12px; border: 1px solid var(--border); border-radius: 12px; padding: 14px; background: var(--surface);
+    display: flex; flex-direction: column; gap: 10px; }
+  .task-add-form input { border: 1px solid var(--border); background: var(--bg); border-radius: 9px; padding: 9px 12px;
+    font-size: 13px; color: var(--text); font-family: inherit; width: 100%; }
+  .task-add-actions { display: flex; gap: 8px; }
+  .task-add-actions .btn { flex: 1; padding: 9px; font-size: 13px; }
   .msg-box { border-radius: 13px; padding: 15px 17px; border: 1px solid var(--border); margin-bottom: 12px; background: var(--surface); }
   .msg-box.wa { background: color-mix(in srgb, #22c55e 8%, var(--bg)); border-color: color-mix(in srgb, #22c55e 25%, var(--border)); }
   .msg-box .msg-label { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; margin-bottom: 7px; }
@@ -678,7 +691,9 @@
           { label: "Tag 3", date: "Fr, 26. Dez", time: "19:00 Uhr", loc: "Gemeindehaus, Hauptstraße 5", task: "Eröffnungsgebet leiten" },
           { label: "Tag 4", date: "Sa, 27. Dez", time: "09:00 Uhr", loc: "Freizeithaus, Waldweg 3", task: "Gebete leiten" }
         ],
-        s2sub: "Schritt 2", s2title: "Aufgaben zuteilen", s2desc: "Organisatoren weisen dem Team Aufgaben zu – auch an sich selbst.",
+        s2sub: "Schritt 2", s2title: "Aufgaben zuteilen", s2desc: "Organisatoren weisen dem Team Aufgaben zu – auch an sich selbst. Weitere Aufgaben können jederzeit ergänzt werden.",
+        s2addBtn: "Aufgabe hinzufügen", s2addLabelPh: "Aufgabenbezeichnung", s2addPersonPh: "Person zuweisen (optional)",
+        s2addConfirm: "Hinzufügen", s2addCancel: "Abbrechen", s2unassigned: "Noch offen",
         s3sub: "Schritt 3", s3title: "Automatische Benachrichtigung", s3desc: "Nach der Zuteilung erhält die Person automatisch eine SMS und WhatsApp-Nachricht:",
         s3smsLabel: "SMS von +49 1521 1424402", s3smsBody: "Hallo Sarah, du wurdest für 'Chorprobe' beim Jugendkreis am Freitag 18:00 eingeteilt. Bitte antworte mit 'Ja' oder 'Nein' (mit Begründung). – JugendConnect",
         s3waLabel: "WhatsApp von +49 1521 1424402", s3waBody: "Hallo Sarah! Du wurdest für 'Chorprobe' beim Jugendkreis eingeteilt (Fr, 18. Juli, 18:00 Uhr). Bitte gib eine Rückmeldung: annehmen oder begründet ablehnen. – JugendConnect",
@@ -747,7 +762,9 @@
           { label: "Day 3", date: "Fri, 26 Dec", time: "7:00 PM", loc: "Community Hall, Main Street 5", task: "Lead opening prayer" },
           { label: "Day 4", date: "Sat, 27 Dec", time: "9:00 AM", loc: "Leisure Center, Forest Path 3", task: "Lead prayers" }
         ],
-        s2sub: "Step 2", s2title: "Assign Tasks", s2desc: "Organisers assign tasks to the team – including themselves.",
+        s2sub: "Step 2", s2title: "Assign Tasks", s2desc: "Organisers assign tasks to the team – including themselves. More tasks can be added at any time.",
+        s2addBtn: "Add task", s2addLabelPh: "Task name", s2addPersonPh: "Assign person (optional)",
+        s2addConfirm: "Add", s2addCancel: "Cancel", s2unassigned: "Unassigned",
         s3sub: "Step 3", s3title: "Automatic Notification", s3desc: "After assignment the person automatically receives an SMS and WhatsApp message:",
         s3smsLabel: "SMS from +49 1521 1424402", s3smsBody: "Hi Sarah, you have been assigned 'Tech & Music' at Youth Circle on Friday 18:00. Please reply 'Yes' or 'No' (with reason). – JugendConnect",
         s3waLabel: "WhatsApp from +49 1521 1424402", s3waBody: "Hi Sarah! You've been assigned 'Tech & Music' at Youth Circle (Fri, 18 July, 18:00). Please give your response: accept or decline with a reason. Thanks! – JugendConnect",
@@ -784,6 +801,13 @@
 
   var currentLang = "de";
   var currentStep = 0;
+  var demoTasks = [
+    { done: false, label: "Chorprobe", person: "Dcns Esther, Mandy, Jemimah" },
+    { done: false, label: "Einstehergebete", person: "Keziah, Adele, Serwaa" },
+    { done: true, label: "Eröffnungsgebet leiten", person: "Brigitte Adu" },
+    { done: true, label: "Gebete leiten", person: "Ältester Isaac" }
+  ];
+  var addingTask = false;
 
   function renderFeatures(t) {
     var grid = document.getElementById('featureGrid');
@@ -816,19 +840,16 @@
       '</div>';
     }
     if (step === 1) {
-      var tasks = [
-        { done: true, label: "Eröffnungsgebet leiten", person: "Lena" },
-        { done: true, label: "PIWCDUS Jugendtreffen", person: "Jonas" },
-        { done: false, label: "Chorprobe", person: "Sarah" },
-        { done: false, label: "Einstehergebete", person: "Ali" }
-      ];
-      var rows = tasks.map(function (task) {
+      var rows = demoTasks.map(function (task) {
         return '<div class="task-row"><div class="task-check' + (task.done ? ' done' : '') + '">' + (task.done ? checkSVG : '') + '</div>' +
           '<span class="task-label">' + task.label + '</span>' +
           '<span class="task-person">' + task.person + '</span></div>';
       }).join('');
+      var addBlock = addingTask
+        ? '<div class="task-add-form"><input type="text" id="newTaskLabel" placeholder="' + d.s2addLabelPh + '" /><input type="text" id="newTaskPerson" placeholder="' + d.s2addPersonPh + '" /><div class="task-add-actions"><button type="button" class="btn btn-primary" id="newTaskConfirm">' + d.s2addConfirm + '</button><button type="button" class="btn btn-outline" id="newTaskCancel">' + d.s2addCancel + '</button></div></div>'
+        : '<button type="button" class="task-add-btn" id="taskAddBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>' + d.s2addBtn + '</button>';
       return '<div class="dp-head"><p>' + d.s2sub + '</p><p>' + d.s2title + '</p></div><div class="dp-body">' +
-        '<p class="lead">' + d.s2desc + '</p><div class="dp-tasklist">' + rows + '</div></div>';
+        '<p class="lead">' + d.s2desc + '</p><div class="dp-tasklist">' + rows + '</div>' + addBlock + '</div>';
     }
     if (step === 2) {
       return '<div class="dp-head"><p>' + d.s3sub + '</p><p>' + d.s3title + '</p></div><div class="dp-body">' +
@@ -865,6 +886,22 @@
       });
     });
     document.getElementById('demoPanel').innerHTML = demoPanelHTML(t, currentStep);
+    if (currentStep === 1) {
+      var addBtn = document.getElementById('taskAddBtn');
+      if (addBtn) addBtn.addEventListener('click', function () { addingTask = true; renderDemo(t); });
+      var confirmBtn = document.getElementById('newTaskConfirm');
+      if (confirmBtn) confirmBtn.addEventListener('click', function () {
+        var label = document.getElementById('newTaskLabel').value.trim();
+        var person = document.getElementById('newTaskPerson').value.trim();
+        if (label) {
+          demoTasks.push({ done: false, label: label, person: person || t.demo.s2unassigned });
+          addingTask = false;
+          renderDemo(t);
+        }
+      });
+      var cancelBtn = document.getElementById('newTaskCancel');
+      if (cancelBtn) cancelBtn.addEventListener('click', function () { addingTask = false; renderDemo(t); });
+    }
   }
 
   function render() {
