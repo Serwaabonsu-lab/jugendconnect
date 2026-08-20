@@ -31,6 +31,7 @@ export const MARKETING_HTML = `
         <input type="date" id="inpBirth" />
       </div>
       <p class="modal-note" id="authNote"></p>
+      <p class="modal-note" id="authStatus" style="display:none;"></p>
       <button type="submit" class="btn btn-primary" id="authSubmit" style="width:100%;">Registrierung senden</button>
     </form>
   </div>

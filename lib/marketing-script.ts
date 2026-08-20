@@ -344,6 +344,7 @@ export const initMarketingScript =
 
   function setAuthStatus(text, kind) {
     var el = document.getElementById('authStatus');
+    if (!el) return;
     if (!text) { el.style.display = 'none'; el.textContent = ''; return; }
     el.style.display = 'block';
     el.textContent = text;
