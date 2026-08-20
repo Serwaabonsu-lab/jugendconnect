@@ -141,8 +141,9 @@ img { max-width: 100%; }
     background: radial-gradient(circle, color-mix(in srgb, var(--yellow-400) 22%, transparent), transparent 70%); pointer-events: none; }
   .hero-glow-b { position: absolute; bottom: -120px; left: -140px; width: 320px; height: 320px; border-radius: 50%;
     background: radial-gradient(circle, color-mix(in srgb, var(--red-500) 10%, transparent), transparent 70%); pointer-events: none; }
-  .hero-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 520px; height: 520px;
+  .hero-watermark { position: absolute; top: 32%; left: 50%; transform: translate(-50%,-50%); width: 340px; height: 340px;
     opacity: 0.06; pointer-events: none; object-fit: contain; }
+  @media (min-width: 960px) { .hero-watermark { top: 50%; width: 520px; height: 520px; } }
   .hero-grid { position: relative; display: grid; grid-template-columns: 1fr; gap: 56px; align-items: center; }
   @media (min-width: 960px) { .hero-grid { grid-template-columns: 1.05fr 0.95fr; gap: 64px; } }
   .badge-row { display: flex; align-items: center; gap: 12px; margin-bottom: 26px; flex-wrap: wrap; }
