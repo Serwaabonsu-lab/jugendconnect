@@ -200,7 +200,7 @@ img { max-width: 100%; }
   .feature-card p { font-size: 13.5px; color: var(--text-muted); line-height: 1.65; margin: 0; }
 
   /* features: sanfter Verlauf zwischen Hero-Hintergrund (mit Wasserzeichen) und About-Sektion */
-  #features { background: linear-gradient(to bottom, var(--bg), var(--surface)); }
+  #features { background: linear-gradient(to bottom, var(--bg), var(--surface-2)); }
 
   /* about */
   .about-section { background: var(--surface); }
