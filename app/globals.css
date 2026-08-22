@@ -143,9 +143,9 @@ img { max-width: 100%; }
     background: radial-gradient(circle, color-mix(in srgb, var(--red-500) 19%, transparent), transparent 70%); pointer-events: none; }
   .hero-glow-c { position: absolute; top: -120px; left: -110px; width: 340px; height: 340px; border-radius: 50%;
     background: radial-gradient(circle, color-mix(in srgb, var(--navy-400) 18%, transparent), transparent 70%); pointer-events: none; }
-  .hero-watermark { position: absolute; top: 38%; left: 50%; transform: translate(-50%,-50%); width: 460px; height: 460px;
+  .hero-watermark { position: absolute; top: 30%; left: 50%; transform: translate(-50%,-50%); width: 400px; height: 400px;
     opacity: 0.1; pointer-events: none; object-fit: contain; }
-  @media (min-width: 960px) { .hero-watermark { top: 50%; width: 740px; height: 740px; } }
+  @media (min-width: 960px) { .hero-watermark { top: 44%; width: 640px; height: 640px; } }
   .hero-grid { position: relative; display: grid; grid-template-columns: 1fr; gap: 56px; align-items: center; }
   @media (min-width: 960px) { .hero-grid { grid-template-columns: 1.05fr 0.95fr; gap: 64px; } }
   .badge-row { display: flex; align-items: center; gap: 12px; margin-bottom: 26px; flex-wrap: wrap; }
