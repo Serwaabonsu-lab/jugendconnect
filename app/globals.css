@@ -137,14 +137,14 @@ img { max-width: 100%; }
 
   /* hero */
   .hero { position: relative; overflow: hidden; padding: 76px 0 92px; }
-  .hero-glow-a { position: absolute; top: -160px; right: -140px; width: 520px; height: 520px; border-radius: 50%;
-    background: radial-gradient(circle, color-mix(in srgb, var(--yellow-400) 32%, transparent) 0%, color-mix(in srgb, var(--yellow-400) 32%, transparent) 30%, transparent 72%); pointer-events: none; }
-  .hero-glow-b { position: absolute; bottom: -120px; left: -140px; width: 360px; height: 360px; border-radius: 50%;
-    background: radial-gradient(circle, color-mix(in srgb, var(--red-500) 24%, transparent) 0%, color-mix(in srgb, var(--red-500) 24%, transparent) 28%, transparent 72%); pointer-events: none; }
-  .hero-glow-c { position: absolute; top: -120px; left: -110px; width: 380px; height: 380px; border-radius: 50%;
-    background: radial-gradient(circle, color-mix(in srgb, var(--navy-400) 26%, transparent) 0%, color-mix(in srgb, var(--navy-400) 26%, transparent) 28%, transparent 72%); pointer-events: none; }
-  .hero-watermark { position: absolute; top: 32%; left: 50%; transform: translate(-50%,-50%); width: 420px; height: 420px;
-    opacity: 0.1; pointer-events: none; object-fit: contain; }
+  .hero-glow-a { position: absolute; top: -160px; right: -140px; width: 500px; height: 500px; border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--yellow-400) 24%, transparent), transparent 70%); pointer-events: none; }
+  .hero-glow-b { position: absolute; bottom: -120px; left: -140px; width: 340px; height: 340px; border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--red-500) 14%, transparent), transparent 70%); pointer-events: none; }
+  .hero-glow-c { position: absolute; top: -120px; left: -110px; width: 340px; height: 340px; border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--navy-400) 13%, transparent), transparent 70%); pointer-events: none; }
+  .hero-watermark { position: absolute; top: 32%; left: 50%; transform: translate(-50%,-50%); width: 400px; height: 400px;
+    opacity: 0.08; pointer-events: none; object-fit: contain; }
   @media (min-width: 960px) { .hero-watermark { top: 50%; width: 640px; height: 640px; } }
   .hero-grid { position: relative; display: grid; grid-template-columns: 1fr; gap: 56px; align-items: center; }
   @media (min-width: 960px) { .hero-grid { grid-template-columns: 1.05fr 0.95fr; gap: 64px; } }
