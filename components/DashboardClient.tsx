@@ -93,7 +93,7 @@ export default function DashboardClient({
             <h2>Registrierte Mitglieder</h2>
             <p className="muted">
               Alle Personen, die sich über die Website registriert haben. Du
-              kannst sie unten Aufgaben zuteilen.
+              kannst sie unten Dienste zuteilen.
             </p>
             <div style={{ overflowX: "auto" }}>
               <table className="app-table">
@@ -160,7 +160,7 @@ export default function DashboardClient({
           <h2>Neues Event anlegen</h2>
           <p className="muted">
             Ein Event kann mehrere Tage umfassen, jeder Tag mit eigener
-            Uhrzeit, Ort und eigenen Aufgaben.
+            Uhrzeit, Ort und eigenen Diensten.
           </p>
           <form className="app-form" onSubmit={createEvent}>
             <label>Event-Titel</label>
@@ -303,7 +303,11 @@ function DayBlock({
   onChanged: () => void;
 }) {
   const supabase = createClient();
+  const [adding, setAdding] = useState(false);
   const [taskLabel, setTaskLabel] = useState("");
+  const [taskDate, setTaskDate] = useState(day.date);
+  const [taskStart, setTaskStart] = useState("");
+  const [taskEnd, setTaskEnd] = useState("");
   const [busy, setBusy] = useState(false);
 
   async function addTask(e: React.FormEvent) {
@@ -313,9 +317,16 @@ function DayBlock({
     await supabase.from("tasks").insert({
       event_day_id: day.id,
       label: taskLabel,
+      date: taskDate || day.date,
+      start_time: taskStart || null,
+      end_time: taskEnd || null,
     });
     setBusy(false);
     setTaskLabel("");
+    setTaskDate(day.date);
+    setTaskStart("");
+    setTaskEnd("");
+    setAdding(false);
     onChanged();
   }
 
@@ -340,18 +351,59 @@ function DayBlock({
         <TaskLine key={task.id} task={task} members={members} onChanged={onChanged} />
       ))}
 
-      <form onSubmit={addTask} style={{ display: "flex", gap: 8, marginTop: 10 }}>
-        <input
-          type="text"
-          placeholder="Neue Aufgabe (z.B. Chorprobe)"
-          value={taskLabel}
-          onChange={(e) => setTaskLabel(e.target.value)}
-          style={{ flex: 1, border: "1px solid var(--border)", borderRadius: 9, padding: "8px 12px", fontSize: 13 }}
-        />
-        <button className="btn btn-outline" type="submit" disabled={busy} style={{ padding: "8px 16px" }}>
-          + Aufgabe
+      {!adding ? (
+        <button
+          type="button"
+          className="task-add-btn"
+          onClick={() => setAdding(true)}
+        >
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+          Dienst hinzufügen
         </button>
-      </form>
+      ) : (
+        <form onSubmit={addTask} className="task-add-form">
+          <input
+            type="text"
+            placeholder="Titel des Dienstes (z.B. Chorprobe)"
+            value={taskLabel}
+            onChange={(e) => setTaskLabel(e.target.value)}
+            required
+          />
+          <input
+            type="date"
+            value={taskDate}
+            onChange={(e) => setTaskDate(e.target.value)}
+          />
+          <div style={{ display: "flex", gap: 8 }}>
+            <input
+              type="time"
+              placeholder="Von"
+              value={taskStart}
+              onChange={(e) => setTaskStart(e.target.value)}
+            />
+            <input
+              type="time"
+              placeholder="Bis"
+              value={taskEnd}
+              onChange={(e) => setTaskEnd(e.target.value)}
+            />
+          </div>
+          <div className="task-add-actions">
+            <button className="btn btn-primary" type="submit" disabled={busy}>
+              Dienst speichern
+            </button>
+            <button
+              className="btn btn-outline"
+              type="button"
+              onClick={() => setAdding(false)}
+            >
+              Abbrechen
+            </button>
+          </div>
+        </form>
+      )}
     </div>
   );
 }
@@ -368,6 +420,12 @@ function TaskLine({
   const [assigning, setAssigning] = useState(false);
   const [warning, setWarning] = useState<string | null>(null);
   const assignee = members.find((m) => m.id === task.assigned_to);
+  const timeRange =
+    task.start_time && task.end_time
+      ? `${task.start_time}–${task.end_time} Uhr`
+      : task.start_time
+      ? `ab ${task.start_time} Uhr`
+      : null;
 
   async function assign(profileId: string) {
     if (!profileId) return;
@@ -406,6 +464,11 @@ function TaskLine({
     >
       <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
         <span style={{ fontSize: 13.5, fontWeight: 600 }}>{task.label}</span>
+        {(timeRange || task.date) && (
+          <span className="muted" style={{ fontSize: 12 }}>
+            {task.date}{timeRange ? ` · ${timeRange}` : ""}
+          </span>
+        )}
         <span className={`pill ${task.status === "pending" && !task.assigned_to ? "unassigned" : task.status}`}>
           {task.assigned_to ? STATUS_LABEL[task.status] : "Nicht zugeteilt"}
         </span>

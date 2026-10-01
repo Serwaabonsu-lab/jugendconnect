@@ -34,6 +34,9 @@ export interface TaskRow {
   id: string;
   event_day_id: string;
   label: string;
+  date: string | null;
+  start_time: string | null;
+  end_time: string | null;
   assigned_to: string | null;
   assigned_by: string | null;
   status: TaskStatus;

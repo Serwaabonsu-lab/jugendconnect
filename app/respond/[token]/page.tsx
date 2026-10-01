@@ -30,6 +30,13 @@ export default async function RespondPage({
   const day = (task as any).event_days;
   const event = day?.events;
   const assigneeName = (task as any).assignee?.full_name ?? "";
+  const taskDate = task.date || day?.date;
+  const taskTime =
+    task.start_time && task.end_time
+      ? `${task.start_time}–${task.end_time} Uhr`
+      : task.start_time
+      ? `ab ${task.start_time} Uhr`
+      : day?.time;
 
   return (
     <div className="center-page">
@@ -43,7 +50,7 @@ export default async function RespondPage({
             </>
           )}
           {event?.title}
-          {day ? ` · ${day.day_label}, ${day.date} · ${day.time} · ${day.location}` : ""}
+          {day ? ` · ${day.day_label}, ${taskDate ?? day.date} · ${taskTime ?? day.time} · ${day.location}` : ""}
         </p>
         <RespondForm token={token} initialStatus={task.status} />
       </div>

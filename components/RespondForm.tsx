@@ -46,14 +46,14 @@ export default function RespondForm({
   if (status === "accepted") {
     return (
       <div className="alert success">
-        Danke! Du hast die Aufgabe angenommen. Der Organisator wurde informiert.
+        Danke! Du hast den Dienst angenommen. Der Organisator wurde informiert.
       </div>
     );
   }
   if (status === "declined") {
     return (
       <div className="alert info">
-        Du hast diese Aufgabe abgelehnt. Der Organisator wurde informiert.
+        Du hast diesen Dienst nicht wahrgenommen. Der Organisator wurde informiert.
       </div>
     );
   }
@@ -70,7 +70,7 @@ export default function RespondForm({
             disabled={busy}
             onClick={() => submit("accepted")}
           >
-            Annehmen
+            Dienst annehmen
           </button>
           <button
             type="button"
@@ -79,12 +79,12 @@ export default function RespondForm({
             disabled={busy}
             onClick={() => setShowDecline(true)}
           >
-            Ablehnen
+            Dienst nicht wahrnehmbar
           </button>
         </div>
       ) : (
         <div className="app-form">
-          <label>Begründung für die Ablehnung</label>
+          <label>Begründung</label>
           <textarea
             value={reason}
             onChange={(e) => setReason(e.target.value)}
@@ -98,7 +98,7 @@ export default function RespondForm({
               disabled={busy}
               onClick={() => submit("declined")}
             >
-              Ablehnung senden
+              Absenden
             </button>
             <button
               type="button"

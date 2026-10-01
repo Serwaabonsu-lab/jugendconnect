@@ -66,11 +66,11 @@ export async function POST(req: NextRequest) {
       const day = (task as any).event_days;
       const statusText =
         action === "accepted"
-          ? "hat die Aufgabe ANGENOMMEN."
-          : `hat die Aufgabe ABGELEHNT. Begründung: "${reason.trim()}"`;
+          ? "hat den Dienst ANGENOMMEN."
+          : `kann den Dienst NICHT WAHRNEHMEN. Begründung: "${reason.trim()}"`;
       const messageBody =
         `Rückmeldung: ${assignee?.full_name ?? "Jemand"} ${statusText} ` +
-        `Aufgabe: "${task.label}"${day ? ` (${day.day_label}, ${day.date})` : ""} – JugendConnect`;
+        `Dienst: "${task.label}"${day ? ` (${day.day_label}, ${task.date ?? day.date})` : ""} – JugendConnect`;
       try {
         await notify(organizer.phone, messageBody);
       } catch (err) {

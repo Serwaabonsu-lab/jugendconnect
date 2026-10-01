@@ -72,10 +72,17 @@ export async function POST(req: NextRequest) {
   const event = day?.events;
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || req.nextUrl.origin;
   const responseLink = `${appUrl}/respond/${updatedTask.response_token}`;
+  const taskDate = updatedTask.date || day?.date;
+  const taskTime =
+    updatedTask.start_time && updatedTask.end_time
+      ? `${updatedTask.start_time}–${updatedTask.end_time} Uhr`
+      : updatedTask.start_time
+      ? `ab ${updatedTask.start_time} Uhr`
+      : day?.time;
 
   const messageBody =
-    `Hallo ${assignee.full_name}, du wurdest für "${task.label}" ` +
-    `bei ${event?.title ?? "einem Event"}${day ? ` (${day.day_label}, ${day.date}, ${day.time}, ${day.location})` : ""} ` +
+    `Hallo ${assignee.full_name}, du wurdest für den Dienst "${task.label}" ` +
+    `bei ${event?.title ?? "einem Event"}${day ? ` (${taskDate ?? day.date}, ${taskTime ?? day.time}, ${day.location})` : ""} ` +
     `eingeteilt. Bitte antworte hier: ${responseLink} – JugendConnect`;
 
   let notifyError: string | null = null;
