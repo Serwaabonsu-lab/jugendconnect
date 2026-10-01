@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
+// Fängt Supabase-E-Mail-Bestätigungslinks ab (z.B. falls "Confirm email"
+// im Supabase-Projekt aktiviert ist). Tauscht den Code gegen eine Session
+// und leitet danach zur Programm-Übersicht weiter.
 export async function GET(req: NextRequest) {
   const { searchParams, origin } = new URL(req.url);
   const code = searchParams.get("code");
@@ -11,20 +14,9 @@ export async function GET(req: NextRequest) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error && data.user?.email) {
-      // Profil verlinken/anlegen, falls noch nicht vorhanden (z.B. erster
-      // Login eines Organisators, der sich noch nie über das Formular
-      // registriert hat).
+      // Profil nachträglich mit dem Auth-Konto verknüpfen, falls es per
+      // supabase.auth.signUp() clientseitig noch nicht verknüpft wurde.
       const admin = createAdminClient();
-      await admin.from("profiles").upsert(
-        {
-          auth_user_id: data.user.id,
-          email: data.user.email.toLowerCase(),
-          full_name: data.user.email,
-        },
-        { onConflict: "email", ignoreDuplicates: false }
-      );
-      // auth_user_id nachträglich setzen, falls das Profil per /api/register
-      // bereits ohne auth_user_id existierte.
       await admin
         .from("profiles")
         .update({ auth_user_id: data.user.id })
@@ -32,5 +24,5 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  return NextResponse.redirect(`${origin}/dashboard`);
+  return NextResponse.redirect(`${origin}/programme`);
 }

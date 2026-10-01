@@ -7,33 +7,39 @@ export const MARKETING_HTML = `
     <button type="button" class="modal-close" id="authClose" aria-label="Schließen">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </button>
-    <div class="modal-tabs">
+    <div class="modal-tabs" id="authTabs">
       <button type="button" class="modal-tab active" id="tabSignup" data-tab="signup">Registrieren</button>
       <button type="button" class="modal-tab" id="tabSignin" data-tab="signin">Anmelden</button>
     </div>
-    <h3 id="authTitle">Kostenlos registrieren</h3>
-    <p id="authSub" class="modal-sub">Erstelle deinen Zugang.</p>
-    <form id="authForm">
-      <div class="form-field" data-field="fullName">
-        <label id="lblFullName">Vollständiger Name</label>
-        <input type="text" id="inpFullName" />
-      </div>
-      <div class="form-field" data-field="email">
-        <label id="lblEmail">E-Mail-Adresse</label>
-        <input type="email" id="inpEmail" required />
-      </div>
-      <div class="form-field" data-field="phone">
-        <label id="lblPhone">Telefonnummer</label>
-        <input type="tel" id="inpPhone" />
-      </div>
-      <div class="form-field" data-field="birth">
-        <label id="lblBirth">Geburtsdatum</label>
-        <input type="date" id="inpBirth" />
-      </div>
-      <p class="modal-note" id="authNote"></p>
-      <p class="modal-note" id="authStatus" style="display:none;"></p>
-      <button type="submit" class="btn btn-primary" id="authSubmit" style="width:100%;">Registrierung senden</button>
-    </form>
+    <div id="authFormView">
+      <h3 id="authTitle">Kostenlos registrieren</h3>
+      <p id="authSub" class="modal-sub">Erstelle deinen Zugang.</p>
+      <form id="authForm">
+        <div class="form-field" data-field="fullName">
+          <label id="lblFullName">Vollständiger Name</label>
+          <input type="text" id="inpFullName" />
+        </div>
+        <div class="form-field" data-field="email">
+          <label id="lblEmail">E-Mail-Adresse</label>
+          <input type="email" id="inpEmail" required />
+        </div>
+        <div class="form-field" data-field="password">
+          <label id="lblPassword">Passwort</label>
+          <input type="password" id="inpPassword" required minlength="8" autocomplete="new-password" />
+        </div>
+        <div class="form-field" data-field="phone">
+          <label id="lblPhone">Telefonnummer</label>
+          <input type="tel" id="inpPhone" />
+        </div>
+        <div class="form-field" data-field="birth">
+          <label id="lblBirth">Geburtsdatum</label>
+          <input type="date" id="inpBirth" />
+        </div>
+        <p class="modal-note" id="authNote"></p>
+        <p class="modal-note" id="authStatus" style="display:none;"></p>
+        <button type="submit" class="btn btn-primary" id="authSubmit" style="width:100%;">Registrierung senden</button>
+      </form>
+    </div>
   </div>
 </div>
 <header>
@@ -48,6 +54,7 @@ export const MARKETING_HTML = `
       <a class="nav-link" href="#about" data-i18n="nav.about">Über uns</a>
       <a class="nav-link" href="#features" data-i18n="nav.features">Funktionen</a>
       <a class="nav-link" href="#demo" data-i18n="nav.demo">Demo</a>
+      <a class="nav-link" href="/programme" data-i18n="nav.programme">Programme</a>
       <a class="nav-link" href="#contact" data-i18n="nav.contact">Kontakt</a>
       <div class="lang-switch" role="group" aria-label="Sprache">
         <button type="button" data-lang="de" class="active">DE</button>
@@ -63,6 +70,7 @@ export const MARKETING_HTML = `
     <a class="nav-link" href="#about" data-i18n="nav.about">Über uns</a>
     <a class="nav-link" href="#features" data-i18n="nav.features">Funktionen</a>
     <a class="nav-link" href="#demo" data-i18n="nav.demo">Demo</a>
+    <a class="nav-link" href="/programme" data-i18n="nav.programme">Programme</a>
     <a class="nav-link" href="#contact" data-i18n="nav.contact">Kontakt</a>
     <div class="lang-switch" role="group" aria-label="Sprache" style="width:fit-content;">
       <button type="button" data-lang="de" class="active">DE</button>

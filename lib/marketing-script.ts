@@ -9,7 +9,7 @@ export const initMarketingScript =
 
   var T = {
     de: {
-      nav: { about: "Über uns", features: "Funktionen", demo: "Demo", contact: "Kontakt", start: "Jetzt starten" },
+      nav: { about: "Über uns", features: "Funktionen", demo: "Demo", programme: "Programme", contact: "Kontakt", start: "Jetzt starten" },
       hero: {
         badge: "Die Software für Jugendarbeit", title: "JugendConnect", subtitle: "Mehr Zeit für das, was zählt.",
         desc: "Dein digitaler Assistent für Programmplanung und Aufgabenverteilung. JugendConnect übernimmt die Technik – damit du dich voll auf deine Jugendlichen konzentrieren kannst.",
@@ -80,7 +80,7 @@ export const initMarketingScript =
       }
     },
     en: {
-      nav: { about: "About", features: "Features", demo: "Demo", contact: "Contact", start: "Get started" },
+      nav: { about: "About", features: "Features", demo: "Demo", programme: "Programmes", contact: "Contact", start: "Get started" },
       hero: {
         badge: "Youth Ministry Software", title: "JugendConnect", subtitle: "More time for what matters.",
         desc: "Your digital assistant for programme planning and task assignment. JugendConnect handles the organisation – so you can focus fully on your youth.",
@@ -315,29 +315,31 @@ export const initMarketingScript =
   var authT = {
     de: {
       signupTab: "Registrieren", signinTab: "Anmelden",
-      signupTitle: "Kostenlos registrieren", signupSub: "Erstelle deinen Zugang – ein Organisator kann dir danach Aufgaben zuteilen.",
-      signinTitle: "Anmelden", signinSub: "Für Organisatoren: Gib deine E-Mail-Adresse an, wir senden dir einen Anmelde-Link.",
-      fullName: "Vollständiger Name", email: "E-Mail-Adresse", phone: "Telefonnummer (für SMS & WhatsApp)", birth: "Geburtsdatum",
-      signupNote: "Deine Angaben werden sicher gespeichert. Organisatoren können dich danach für Aufgaben einteilen.",
-      signinNote: "Nur für Organisatoren. Du erhältst eine E-Mail mit einem Anmelde-Link – kein Passwort nötig.",
-      signupCta: "Registrierung senden", signinCta: "Anmelde-Link senden",
+      signupTitle: "Kostenlos registrieren", signupSub: "Erstelle deinen Zugang mit E-Mail und Passwort.",
+      signinTitle: "Anmelden", signinSub: "Melde dich mit E-Mail und Passwort an.",
+      fullName: "Vollständiger Name", email: "E-Mail-Adresse", password: "Passwort", phone: "Telefonnummer (für SMS & WhatsApp)", birth: "Geburtsdatum",
+      signupNote: "Deine Angaben werden sicher gespeichert.",
+      signinNote: "Mitglieder und Organisatoren können sich hier anmelden.",
+      signupCta: "Registrierung senden", signinCta: "Anmelden",
       submitting: "Wird gesendet...",
-      signupSuccess: "Danke! Deine Registrierung ist eingegangen.",
-      signinSuccess: "E-Mail gesendet! Prüfe dein Postfach und klicke auf den Anmelde-Link.",
-      genericError: "Etwas ist schiefgelaufen. Bitte versuche es erneut."
+      signupSuccess: "Konto erstellt! Du wirst weitergeleitet...",
+      signinSuccess: "Angemeldet! Du wirst weitergeleitet...",
+      genericError: "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
+      confirmEmailNote: "Bitte bestätige deine E-Mail-Adresse über den Link, den wir dir geschickt haben, und melde dich danach mit deinem Passwort an."
     },
     en: {
       signupTab: "Sign up", signinTab: "Sign in",
-      signupTitle: "Create free account", signupSub: "Create your access – an organiser can then assign you tasks.",
-      signinTitle: "Sign in", signinSub: "For organisers: enter your email address, we'll send you a sign-in link.",
-      fullName: "Full name", email: "Email address", phone: "Phone number (for SMS & WhatsApp)", birth: "Date of birth",
-      signupNote: "Your details are stored securely. Organisers can then assign tasks to you.",
-      signinNote: "Organisers only. You'll get an email with a sign-in link – no password needed.",
-      signupCta: "Send registration", signinCta: "Send sign-in link",
+      signupTitle: "Create free account", signupSub: "Create your access with email and password.",
+      signinTitle: "Sign in", signinSub: "Sign in with your email and password.",
+      fullName: "Full name", email: "Email address", password: "Password", phone: "Phone number (for SMS & WhatsApp)", birth: "Date of birth",
+      signupNote: "Your details are stored securely.",
+      signinNote: "Members and organisers can sign in here.",
+      signupCta: "Send registration", signinCta: "Sign in",
       submitting: "Sending...",
-      signupSuccess: "Thanks! Your registration has been received.",
-      signinSuccess: "Email sent! Check your inbox and click the sign-in link.",
-      genericError: "Something went wrong. Please try again."
+      signupSuccess: "Account created! Redirecting...",
+      signinSuccess: "Signed in! Redirecting...",
+      genericError: "Something went wrong. Please try again.",
+      confirmEmailNote: "Please confirm your email via the link we sent you, then sign in with your password."
     }
   };
   var authTab = 'signup';
@@ -359,6 +361,7 @@ export const initMarketingScript =
     document.getElementById('authSub').textContent = authTab === 'signup' ? a.signupSub : a.signinSub;
     document.getElementById('lblFullName').textContent = a.fullName;
     document.getElementById('lblEmail').textContent = a.email;
+    document.getElementById('lblPassword').textContent = a.password;
     document.getElementById('lblPhone').textContent = a.phone;
     document.getElementById('lblBirth').textContent = a.birth;
     document.getElementById('authNote').textContent = authTab === 'signup' ? a.signupNote : a.signinNote;
@@ -403,6 +406,7 @@ export const initMarketingScript =
     var a = authT[currentLang];
     var name = document.getElementById('inpFullName').value.trim();
     var email = document.getElementById('inpEmail').value.trim();
+    var password = document.getElementById('inpPassword').value;
     var phone = document.getElementById('inpPhone').value.trim();
     var birth = document.getElementById('inpBirth').value.trim();
     var submitBtn = document.getElementById('authSubmit');
@@ -411,39 +415,55 @@ export const initMarketingScript =
     setAuthStatus('');
 
     if (authTab === 'signup') {
-      fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fullName: name, email: email, phone: phone, birthDate: birth })
-      })
-        .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
-        .then(function (result) {
+      supabase.auth.signUp({ email: email, password: password }).then(function (result) {
+        if (result.error) {
           submitBtn.disabled = false;
           submitBtn.textContent = a.signupCta;
-          if (result.ok) {
-            setAuthStatus(a.signupSuccess, 'success');
-            document.getElementById('authForm').reset();
-          } else {
-            setAuthStatus((result.data && result.data.error) || a.genericError, 'error');
-          }
-        })
-        .catch(function () {
+          setAuthStatus(result.error.message || a.genericError, 'error');
+          return;
+        }
+        var user = result.data && result.data.user;
+        var hasSession = !!(result.data && result.data.session);
+        if (!user) {
           submitBtn.disabled = false;
           submitBtn.textContent = a.signupCta;
           setAuthStatus(a.genericError, 'error');
+          return;
+        }
+        if (!hasSession) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = a.signupCta;
+          setAuthStatus(a.confirmEmailNote, 'success');
+          document.getElementById('authForm').reset();
+          return;
+        }
+        supabase.from('profiles').insert({
+          auth_user_id: user.id, full_name: name, email: email,
+          phone: phone || null, birth_date: birth || null, role: 'member'
+        }).then(function (insertResult) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = a.signupCta;
+          if (insertResult.error) {
+            setAuthStatus(insertResult.error.message || a.genericError, 'error');
+            return;
+          }
+          setAuthStatus(a.signupSuccess, 'success');
+          setTimeout(function () { window.location.href = '/programme'; }, 600);
         });
+      }).catch(function () {
+        submitBtn.disabled = false;
+        submitBtn.textContent = a.signupCta;
+        setAuthStatus(a.genericError, 'error');
+      });
     } else {
-      supabase.auth.signInWithOtp({
-        email: email,
-        options: { emailRedirectTo: window.location.origin + '/auth/callback' }
-      }).then(function (result) {
+      supabase.auth.signInWithPassword({ email: email, password: password }).then(function (result) {
         submitBtn.disabled = false;
         submitBtn.textContent = a.signinCta;
         if (result.error) {
           setAuthStatus(result.error.message || a.genericError, 'error');
         } else {
           setAuthStatus(a.signinSuccess, 'success');
-          document.getElementById('authForm').reset();
+          setTimeout(function () { window.location.href = '/programme'; }, 600);
         }
       }).catch(function () {
         submitBtn.disabled = false;
@@ -452,5 +472,6 @@ export const initMarketingScript =
       });
     }
   });
+
   render();
 });

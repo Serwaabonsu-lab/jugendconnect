@@ -51,3 +51,4 @@ export async function notify(to: string, body: string) {
     await sendSMS(to, body);
   }
 }
+
