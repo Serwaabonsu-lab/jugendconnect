@@ -491,7 +491,7 @@ export const initMarketingScript =
     var btn = document.getElementById('forgotPasswordBtn');
     btn.disabled = true;
     supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/auth/callback?next=/auth/reset-password'
+      redirectTo: window.location.origin + '/auth/reset-password'
     }).then(function (result) {
       btn.disabled = false;
       if (result.error) {

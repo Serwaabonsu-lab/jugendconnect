@@ -1,14 +1,52 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
 export default function ResetPasswordPage() {
+  const supabaseRef = useRef(createClient());
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
+  const [ready, setReady] = useState(false);
+  const [linkInvalid, setLinkInvalid] = useState(false);
+
+  useEffect(() => {
+    const supabase = supabaseRef.current;
+
+    async function init() {
+      // Supabase schickt den Reset-Link entweder mit ?code=... (PKCE) oder
+      // mit Zugangsdaten im URL-Hash (#access_token=...&type=recovery).
+      // Beide Fälle hier abfangen, bevor das Formular freigegeben wird.
+      const code = new URLSearchParams(window.location.search).get("code");
+      if (code) {
+        const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+        if (exchangeError) {
+          setLinkInvalid(true);
+          return;
+        }
+      }
+      const { data } = await supabase.auth.getSession();
+      if (data.session) {
+        setReady(true);
+      } else {
+        setLinkInvalid(true);
+      }
+    }
+
+    const { data: listener } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") {
+        setReady(true);
+        setLinkInvalid(false);
+      }
+    });
+
+    init();
+
+    return () => listener.subscription.unsubscribe();
+  }, []);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -22,8 +60,7 @@ export default function ResetPasswordPage() {
       return;
     }
     setBusy(true);
-    const supabase = createClient();
-    const { error: updateError } = await supabase.auth.updateUser({ password });
+    const { error: updateError } = await supabaseRef.current.auth.updateUser({ password });
     setBusy(false);
     if (updateError) {
       setError(updateError.message);
@@ -44,6 +81,13 @@ export default function ResetPasswordPage() {
           <div className="alert success">
             Passwort gespeichert! Du wirst weitergeleitet...
           </div>
+        ) : linkInvalid ? (
+          <div className="alert error">
+            Dieser Link ist ungültig oder abgelaufen. Bitte fordere über
+            &quot;Passwort vergessen?&quot; einen neuen Link an.
+          </div>
+        ) : !ready ? (
+          <p className="muted">Link wird geprüft...</p>
         ) : (
           <form className="app-form" onSubmit={submit} style={{ textAlign: "left" }}>
             {error && <div className="alert error">{error}</div>}
