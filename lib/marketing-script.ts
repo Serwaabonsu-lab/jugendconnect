@@ -325,7 +325,10 @@ export const initMarketingScript =
       signupSuccess: "Konto erstellt! Du wirst weitergeleitet...",
       signinSuccess: "Angemeldet! Du wirst weitergeleitet...",
       genericError: "Etwas ist schiefgelaufen. Bitte versuche es erneut.",
-      confirmEmailNote: "Bitte bestätige deine E-Mail-Adresse über den Link, den wir dir geschickt haben, und melde dich danach mit deinem Passwort an."
+      confirmEmailNote: "Bitte bestätige deine E-Mail-Adresse über den Link, den wir dir geschickt haben, und melde dich danach mit deinem Passwort an.",
+      forgotPassword: "Passwort vergessen?",
+      forgotPasswordPrompt: "Gib deine E-Mail-Adresse oben ein, dann senden wir dir einen Link zum Zurücksetzen.",
+      resetEmailSent: "E-Mail gesendet! Prüfe dein Postfach und klicke auf den Link, um ein neues Passwort zu vergeben."
     },
     en: {
       signupTab: "Sign up", signinTab: "Sign in",
@@ -339,7 +342,10 @@ export const initMarketingScript =
       signupSuccess: "Account created! Redirecting...",
       signinSuccess: "Signed in! Redirecting...",
       genericError: "Something went wrong. Please try again.",
-      confirmEmailNote: "Please confirm your email via the link we sent you, then sign in with your password."
+      confirmEmailNote: "Please confirm your email via the link we sent you, then sign in with your password.",
+      forgotPassword: "Forgot password?",
+      forgotPasswordPrompt: "Enter your email address above, then we'll send you a reset link.",
+      resetEmailSent: "Email sent! Check your inbox and click the link to set a new password."
     }
   };
   var authTab = 'signup';
@@ -372,6 +378,8 @@ export const initMarketingScript =
     document.querySelector('.form-field[data-field="phone"]').classList.toggle('hidden', authTab === 'signin');
     document.querySelector('.form-field[data-field="birth"]').classList.toggle('hidden', authTab === 'signin');
     document.querySelector('.form-field[data-field="fullName"]').classList.toggle('hidden', authTab === 'signin');
+    document.getElementById('forgotPasswordBtn').textContent = a.forgotPassword;
+    document.getElementById('forgotPasswordBtn').style.display = authTab === 'signin' ? 'block' : 'none';
     setAuthStatus('');
   }
 
@@ -471,6 +479,30 @@ export const initMarketingScript =
         setAuthStatus(a.genericError, 'error');
       });
     }
+  });
+
+  document.getElementById('forgotPasswordBtn').addEventListener('click', function () {
+    var a = authT[currentLang];
+    var email = document.getElementById('inpEmail').value.trim();
+    if (!email) {
+      setAuthStatus(a.forgotPasswordPrompt, 'error');
+      return;
+    }
+    var btn = document.getElementById('forgotPasswordBtn');
+    btn.disabled = true;
+    supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + '/auth/callback?next=/auth/reset-password'
+    }).then(function (result) {
+      btn.disabled = false;
+      if (result.error) {
+        setAuthStatus(result.error.message || a.genericError, 'error');
+      } else {
+        setAuthStatus(a.resetEmailSent, 'success');
+      }
+    }).catch(function () {
+      btn.disabled = false;
+      setAuthStatus(a.genericError, 'error');
+    });
   });
 
   render();

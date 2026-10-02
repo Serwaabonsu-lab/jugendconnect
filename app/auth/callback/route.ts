@@ -2,12 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 
-// Fängt Supabase-E-Mail-Bestätigungslinks ab (z.B. falls "Confirm email"
-// im Supabase-Projekt aktiviert ist). Tauscht den Code gegen eine Session
-// und leitet danach zur Programm-Übersicht weiter.
+// Fängt Supabase-E-Mail-Links ab (E-Mail-Bestätigung und Passwort-Reset).
+// Tauscht den Code gegen eine Session und leitet danach weiter - standard-
+// mäßig zur Programm-Übersicht, oder zum per "next" angegebenen Ziel
+// (z.B. /auth/reset-password nach einem Passwort-Reset-Link).
 export async function GET(req: NextRequest) {
   const { searchParams, origin } = new URL(req.url);
   const code = searchParams.get("code");
+  const next = searchParams.get("next");
+  const safeNext = next && next.startsWith("/") ? next : "/programme";
 
   if (code) {
     const supabase = await createClient();
@@ -24,5 +27,5 @@ export async function GET(req: NextRequest) {
     }
   }
 
-  return NextResponse.redirect(`${origin}/programme`);
+  return NextResponse.redirect(`${origin}${safeNext}`);
 }

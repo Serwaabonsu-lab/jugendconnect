@@ -38,6 +38,7 @@ export const MARKETING_HTML = `
         <p class="modal-note" id="authNote"></p>
         <p class="modal-note" id="authStatus" style="display:none;"></p>
         <button type="submit" class="btn btn-primary" id="authSubmit" style="width:100%;">Registrierung senden</button>
+        <button type="button" id="forgotPasswordBtn" style="display:none;width:100%;text-align:center;background:none;border:none;color:var(--navy-600);font-size:12.5px;margin-top:12px;text-decoration:underline;cursor:pointer;">Passwort vergessen?</button>
       </form>
     </div>
   </div>
