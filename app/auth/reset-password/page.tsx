@@ -103,8 +103,19 @@ export default function ResetPasswordPage() {
           </div>
         ) : linkInvalid ? (
           <div className="alert error">
-            Dieser Link ist ungültig oder abgelaufen. Bitte fordere über
-            &quot;Passwort vergessen?&quot; einen neuen Link an.
+            {debugInfo.includes("code verifier") ? (
+              <>
+                Dieser Link wurde auf einem anderen Gerät oder Browser
+                geöffnet als dem, auf dem du ihn angefordert hast. Bitte
+                fordere &quot;Passwort vergessen?&quot; erneut an und öffne
+                die E-Mail diesmal auf demselben Gerät/Browser.
+              </>
+            ) : (
+              <>
+                Dieser Link ist ungültig oder abgelaufen. Bitte fordere über
+                &quot;Passwort vergessen?&quot; einen neuen Link an.
+              </>
+            )}
             {debugInfo && (
               <div style={{ marginTop: 8, fontSize: 11.5, opacity: 0.8 }}>
                 Technische Info: {debugInfo}
