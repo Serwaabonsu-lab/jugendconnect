@@ -12,18 +12,30 @@ export default function ResetPasswordPage() {
   const [done, setDone] = useState(false);
   const [ready, setReady] = useState(false);
   const [linkInvalid, setLinkInvalid] = useState(false);
+  const [debugInfo, setDebugInfo] = useState("");
 
   useEffect(() => {
     const supabase = supabaseRef.current;
 
     async function init() {
-      // Supabase schickt den Reset-Link entweder mit ?code=... (PKCE) oder
-      // mit Zugangsdaten im URL-Hash (#access_token=...&type=recovery).
-      // Beide Fälle hier abfangen, bevor das Formular freigegeben wird.
-      const code = new URLSearchParams(window.location.search).get("code");
+      // Supabase hängt bei einem ungültigen/abgelaufenen Link oft direkt
+      // eine Fehlerbeschreibung an die URL an (?error=...&error_description=...
+      // oder im Hash). Das hier auslesen, um die echte Ursache zu zeigen.
+      const search = new URLSearchParams(window.location.search);
+      const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+      const urlError = search.get("error_description") || hash.get("error_description")
+        || search.get("error") || hash.get("error");
+      if (urlError) {
+        setDebugInfo(decodeURIComponent(urlError));
+        setLinkInvalid(true);
+        return;
+      }
+
+      const code = search.get("code");
       if (code) {
         const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
         if (exchangeError) {
+          setDebugInfo(exchangeError.message);
           setLinkInvalid(true);
           return;
         }
@@ -31,9 +43,17 @@ export default function ResetPasswordPage() {
       const { data } = await supabase.auth.getSession();
       if (data.session) {
         setReady(true);
-      } else {
+      } else if (!hash.get("access_token")) {
+        // Kein Code, kein Hash-Token, keine Session: Link enthielt nichts
+        // Verwertbares.
+        setDebugInfo(
+          "Keine Zugangsdaten in der Adresse gefunden (weder ?code= noch #access_token=)."
+        );
         setLinkInvalid(true);
       }
+      // Falls ein #access_token im Hash steckt, aber getSession() noch keine
+      // Session zeigt, verarbeitet der Supabase-Client das gerade noch -
+      // das PASSWORD_RECOVERY-Event unten übernimmt dann.
     }
 
     const { data: listener } = supabase.auth.onAuthStateChange((event) => {
@@ -85,6 +105,11 @@ export default function ResetPasswordPage() {
           <div className="alert error">
             Dieser Link ist ungültig oder abgelaufen. Bitte fordere über
             &quot;Passwort vergessen?&quot; einen neuen Link an.
+            {debugInfo && (
+              <div style={{ marginTop: 8, fontSize: 11.5, opacity: 0.8 }}>
+                Technische Info: {debugInfo}
+              </div>
+            )}
           </div>
         ) : !ready ? (
           <p className="muted">Link wird geprüft...</p>
