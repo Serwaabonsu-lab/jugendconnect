@@ -12,12 +12,17 @@ function getClient() {
 }
 
 /**
- * Normalisiert eine Telefonnummer minimal für Twilio (E.164 wird erwartet,
- * z.B. +491701234567). Nimmt an, dass die Nummer bereits mit Ländercode
- * eingegeben wurde; entfernt nur Leerzeichen/Bindestriche.
+ * Normalisiert eine Telefonnummer für Twilio ins E.164-Format
+ * (z.B. +491701234567). Deutsche Nummern werden ohne Ländervorwahl
+ * eingegeben (z.B. 01701234567) - die führende 0 wird dann durch +49
+ * ersetzt. Nummern, die bereits mit + beginnen, bleiben unverändert.
  */
 function normalizePhone(phone: string): string {
-  return phone.replace(/[\s-]/g, "");
+  const cleaned = phone.replace(/[\s()-]/g, "");
+  if (cleaned.startsWith("+")) return cleaned;
+  if (cleaned.startsWith("00")) return `+${cleaned.slice(2)}`;
+  if (cleaned.startsWith("0")) return `+49${cleaned.slice(1)}`;
+  return cleaned;
 }
 
 export async function sendSMS(to: string, body: string) {
